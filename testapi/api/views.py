@@ -40,6 +40,7 @@ class projectList(APIView):
 
 #------------- CRUD operations ------------
 class projectDetails(APIView):
+    # permission_classes = [IsAuthenticated, ]
     def get_object(self, pk):
 
         print("🚀 ~ file: views.py ~ line 44 ~ id", pk)
