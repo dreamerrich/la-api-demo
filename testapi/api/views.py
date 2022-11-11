@@ -22,8 +22,9 @@ class projectList(APIView):
         return queryset
 
     def get_queryset(self):
-        return Project.objects.all().order_by("created_at")
-        # return Project.objects.all().order_by("-created_at")
+        user = self.request.user
+        return Project.objects.filter(created_by=user).order_by("created_at")
+        # return Project.objects.filter(created_by=user).order_by("-created_at")
 
     def get(self, request, format=None):
         the_filtered_qs = self.filter_queryset(self.get_queryset())
