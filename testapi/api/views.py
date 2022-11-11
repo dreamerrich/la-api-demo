@@ -12,13 +12,16 @@ from rest_framework import filters
 #------------- creating data --------------
 class projectList(APIView):
     permission_classes = [IsAuthenticated, ]
+
     filter_backends = (filters.SearchFilter,)
     search_fields = ['project_name', 'color']
 
     def filter_queryset(self, queryset):
+
         for backend in list(self.filter_backends):
             queryset = backend().filter_queryset(self.request, queryset, self)
             print("🚀 ~ file: views.py ~ line 21 ~ queryset", queryset)
+            print("🚀 ~ file: views.py ~ line 22 ~ queryset", queryset)
         return queryset
 
     def get_queryset(self):
@@ -41,23 +44,25 @@ class projectList(APIView):
 
 #------------- CRUD operations ------------
 class projectDetails(APIView):
-    # permission_classes = [IsAuthenticated, ]
+    
     def get_object(self, pk):
-
         print("🚀 ~ file: views.py ~ line 44 ~ id", pk)
         try:
-            return Project.objects.get(pk=pk)
+            user = self.request.user
+            return Project.objects.filter(created_by=user).get(pk=pk)
         except Project.DoesNotExist as e:
             raise Http404 from e
 
     def get(self, request, pk, format=None):
         project_data = self.get_object(pk)
+        print("🚀 ~ file: views.py ~ line 55 ~ project_data", project_data)
         serializer = projectSerializers(project_data)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         project_data = self.get_object(pk)
         serializer = projectSerializers(project_data, data=request.data)
+        print("🚀 ~ file: views.py ~ line 62 ~ serializer", serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
