@@ -14,7 +14,7 @@ class projectList(APIView):
     permission_classes = [IsAuthenticated, ]
 
     filter_backends = (filters.SearchFilter,)
-    search_fields = ['project_name', 'color']
+    search_fields = ["project_name", "color"]
 
     def filter_queryset(self, queryset):
 
@@ -23,6 +23,7 @@ class projectList(APIView):
             print("🚀 ~ file: views.py ~ line 21 ~ queryset", queryset)
             print("🚀 ~ file: views.py ~ line 22 ~ queryset", queryset)
         return queryset
+     
 
     def get_queryset(self):
         user = self.request.user
